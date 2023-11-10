@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ChurchController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,3 +38,15 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::get('church-vibes/{name?}/{email?}', [ChurchController::class, 'churchVibe'])->name('church-vibes');
+
+Route::get('all-notification', static function(){
+    $user = User::findOrFail(auth()->user()->id);
+
+    foreach ($user->notifications as $notification) {
+        echo $notification->data['title'] . '<br>';
+        echo $notification->data['message'] . '<br>';
+    }
+});
